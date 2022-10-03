@@ -19,6 +19,6 @@ function getVplan(sid, schoolID, day) {
     }, (err, res, body) => {
         if (err) { console.error(err) }
 
-        fs.writeFileSync("vertretungen.json", (body));
+        return JSON.loads(body);
     })
 }
