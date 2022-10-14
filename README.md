@@ -1,5 +1,7 @@
 # SPHvertretungsplan
 
+!!! wirepusher and auto refresh not implemented jet.
+
 Simple script to fetch the representation plan data from the school portal hesse and send it to your WirePusher Android client.
 
 ## Installation
