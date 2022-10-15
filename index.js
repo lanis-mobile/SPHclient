@@ -91,15 +91,60 @@ function getDateTomorrow() {
     return String(day)+"."+String(month)+"."+String(jear)
 }
 
-login((sid) => {
-    getVplan(getDateToday(), sid, (vplan) => {
-        extractClass(vplan, SETTINGS.USER.VINTAGE, SETTINGS.USER.CHAR, (data) => {
-            console.log(data);
+async function sendToWPclient(vplan){
+    if (vplan.length == 0) return;
+    
+    let send = (title, message)=>{
+        request({
+            url: "https://wirepusher.com/send",
+            method: "POST",
+            qs: {
+                id: SETTINGS.WIREPUSHER.TOKEN,
+                title: title,
+                message: message,
+                type: SETTINGS.WIREPUSHER.TYPE
+            }
+        }, (err, _res, _body) => {
+            if (err) { console.error(err) }
+        });
+    }
+
+    for(let i = 0; i<vplan.length;i++){
+        if (vplan[i]["Art"] == "Raumtausch") {
+            let sendString = vplan[i]["Raum"]+" ;Du hast am "+vplan[i]["Tag"]+" "+vplan[i]["Stunde"]+" Stunde in "+vplan[i]["Fach"]+" einen Raumtausch. ("+vplan[i]["Hinweis"]+")";
+            await send("Raumtausch", sendString);
+        } else if (vplan[i]["Art"] == "Vertretung") {
+            let sendString = vplan[i]["Lehrer"]+" → "+vplan[i]["Vertreter"]+"; "+vplan[i]["Raum"]+" ;Du hast am "+vplan[i]["Tag"]+" "+vplan[i]["Stunde"]+" Stunde in "+vplan[i]["Fach"]+" Vertretung. ("+vplan[i]["Hinweis"]+")";
+            await send("Raumtausch", sendString);
+        } else if (vplan[i]["Art"] == "Entfall") {
+            let sendString = vplan[i]["Stunde"]+" Stunde Entfall bei "+vplan[i]["Lehrer"]+"("+vplan[i]["Hinweis"]+")";
+            await send("Entfall", sendString);
+        } else if (vplan[i]["Art"] == "Sondereinsatz") {
+            let sendString = vplan[i]["Stunde"]+" Stunde Sondereinsatz bei "+vplan[i]["Lehrer"]+"("+vplan[i]["Hinweis"]+")";
+            await send("Sondereinsatz", sendString);
+        } else {
+            await send(
+                vplan[i]["Art"],
+                ("Tag: "+vplan[i]["Tag"]+"; Lehrer: "+vplan[i]["Vertreter"]+"; Stunde: "+vplan[i]["Stunde"]+"; Raum: "+vplan[i]["Raum"]+"; Fach: "+vplan[i]["Fach"]+"; Hinweis: "+vplan[i]["Hinweis"])
+            );
+        }
+
+    }
+}
+
+setInterval(()=>{
+    login((sid) => {
+        getVplan(getDateToday(), sid, (vplan) => {
+            extractClass(vplan, SETTINGS.USER.VINTAGE, SETTINGS.USER.CHAR, (data) => {
+                sendToWPclient(data);
+            });
+        });
+        getVplan(getDateTomorrow(), sid, (vplan) => {
+            extractClass(vplan, SETTINGS.USER.VINTAGE, SETTINGS.USER.CHAR, (data) => {
+                sendToWPclient(data);
+            });
         });
     });
-    getVplan(getDateTomorrow(), sid, (vplan) => {
-        extractClass(vplan, SETTINGS.USER.VINTAGE, SETTINGS.USER.CHAR, (data) => {
-            console.log(data);
-        });
-    });
-});
+    
+}, SETTINGS.REFRESH_TIME_SECS*1000)
+

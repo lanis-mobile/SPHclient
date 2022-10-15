@@ -1,0 +1,16 @@
+{
+    "SCHOOLID": "SCHOOL_ID example: 5182",
+    "USER": {
+        "NAME": "user.name",
+        "PWD": "PASSWORD",
+        "CLASS": {
+            "VINTAGE": "JAHRGANG",
+            "CHAR": "KLASSENBUCHSTABE"
+        }
+    },
+    "REFRESH_TIME_SECS": "1200",
+    "WIREPUSHER":{
+        "TOKEN": "YOUR_WP_TOKEN",
+        "TYPE": "vplan"
+    }
+}
