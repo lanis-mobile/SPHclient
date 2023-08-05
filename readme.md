@@ -12,8 +12,12 @@ Für weitere features kann ein Issue mit dem tag "feature request" oder eine pul
 Da jede Schule über eine andere "Ausstattung" mit Lanis verfügt (<a href="https://info.schulportal.hessen.de/das-sph/sph-ueberblick/sph-lernsys/">siehe hier</a>) kann ich nicht jedes Feature implementieren. Ich kann ausschließlich die Features meiner Schule (5182 - Max-Planck-Schule Rüsselsheim) behandeln. 
 
 ## Beispiel
+```bash
+npm i sphclient
+```
+
 ```javascript
-const SPHclient = require("./SPHclient");
+const SPHclient = require("sphclient");
 
 // erstelle ein neues Client objekt mit Benutzername Passwort und Schulnummer
 const client = new SPHclient("user.name", 'mypass123', 5182)
