@@ -1,17 +1,15 @@
 {
   "name": "sphclient",
   "version": "1.0.0",
-  "description": "",
   "main": "SPHclient.js",
-  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alessioC42/SPHclient.git"
   },
-  "author": "A. Caputo",
-  "license": "ISC",
+  "author": "Alessio Caputo",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/alessioC42/SPHclient/issues"
   },
-  "homepage": "https://github.com/alessioC42/SPHclient#readme"
+  "homepage": "https://github.com/alessioC42/SPHclient"
 }
