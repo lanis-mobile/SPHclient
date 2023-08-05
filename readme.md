@@ -25,7 +25,7 @@ const client = new SPHclient("user.name", 'mypass123', 5182)
 // warte den Login ab und erhalte anschließend den Vertretungsplan.
 client.authenticate(()=>{
     client.getVplan(new Date(), vplan => {
-        //die "plan" Variable enthällt den gesammten Vertretungsplan der Schule.
+        //die "vplan" Variable enthällt den gesammten Vertretungsplan der Schule.
 
         //die Daten verwenden
         if (somethingForMeInPlan(vplan)) {
