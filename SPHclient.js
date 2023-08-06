@@ -87,7 +87,7 @@ class SPHclient {
    * @param {callback} callback 
    */
   logout(callback) {
-    if(!this.logged_in) {
+    if (!this.logged_in) {
       throw new Error("Client not authenticated!")
     }
     const url = "https://start.schulportal.hessen.de/index.php?logout=all";
@@ -158,6 +158,9 @@ class SPHclient {
       this.log(`AJAX-login returned code: ${await response.text()}`);
     } else {
       this.log(`AJAX-login failed! Session not valid.`, 1);
+      this.logout();
+      clearInterval(this.ajaxInterval);
+
       throw new Error("AJAX-login failed! Maybe the session has expired")
     }
   }
@@ -183,7 +186,7 @@ class SPHclient {
       body: formData
     })
       .then(response => response.json())
-      .then(data => { this.log("downloaded vPlan"); callback(data) })
+      .then(data => { callback(data) })
       .catch(error => console.error(error));
   }
 
