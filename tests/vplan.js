@@ -1,10 +1,7 @@
 const SPHclient = require("../SPHclient");
+const secrets = require("./secrets.json")
 
-const username = "user.name";
-const password = "password";
-const schoolID = "5182";
-
-const client = new SPHclient(username, password, schoolID);
+const client = new SPHclient(secrets.username, secrets.password, secrets.schoolID, 0);
 
 client.authenticate(() => {
     client.getVplan(new Date(2023, 8, 5), plan=>{

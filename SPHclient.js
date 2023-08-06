@@ -7,10 +7,11 @@
 class SPHclient {
   #loginURL;
 
-  constructor(username, password, schoolID) {
+  constructor(username, password, schoolID, loggingLevel=1) {
     this.username = username;
     this.password = password;
     this.schoolID = schoolID;
+    this.loggingLevel = loggingLevel
     this.#loginURL = `https://login.schulportal.hessen.de/?i=${schoolID}`;
     this.cookies = {};
   }
@@ -31,7 +32,7 @@ class SPHclient {
     }).then((response) => {
       if (response.headers.has("location")) {  //correct username and password
         this.parseSetCookieHeader(response.headers.get("set-cookie"))
-
+        this.log("auth request 1 successful.", 0);
         fetch(response.headers.get("location"), {
           redirect: "manual",
           method: "GET",
@@ -40,7 +41,7 @@ class SPHclient {
           }
         }).then((response) => {
           if (response.headers.get("location")) {
-
+            this.log("auth request 2 successful.", 0);
             fetch(response.headers.get("location"), {
               method: "GET",
               redirect: "manual",
@@ -49,14 +50,16 @@ class SPHclient {
               }
             }).then((response) => {
               this.parseSetCookieHeader(response.headers.get("set-cookie"));
-              console.log(`[SPHclient]: user ${this.username} authenticated successful with sid=${this.cookies.sid.value}`);
+              this.log(`authenticated successful with sid=${this.cookies.sid.value}`, 1);
               callback();
             });
           } else {
+            this.log("error during auth request 2", 0);
             throw Error("Unexpected error during request");
           }
         })
       } else {
+        this.log("error during auth request 1", 0);
         throw Error("Wrong credentials or the lanis team changed the API again ;D");
       }
     })
@@ -77,7 +80,7 @@ class SPHclient {
     }).then(response => {
       this.parseSetCookieHeader(response.headers.get("set-cookie"));
 
-      console.log(`[SPHclient]: user ${this.username} deauthenticated successful.`);
+      this.log(`deauthenticated successful.`, 1);
       callback();
     })
   }
@@ -123,7 +126,6 @@ class SPHclient {
    */
   getVplan(date, callback) {
     date = date.toLocaleDateString("en-CH"); // format: dd.mm.jjjj
-    console.log(date);
     const url = `https://start.schulportal.hessen.de/vertretungsplan.php?ganzerPlan=true&tag=${date}`;
     const formData = new URLSearchParams();
     formData.append("tag", date);
@@ -169,6 +171,20 @@ class SPHclient {
       .then(response => response.json())
       .then(data => callback(data))
       .catch(error => console.error(error));
+  }
+
+  /**
+   * @param {string} message
+   * @param {number} loglevel
+   */
+  log(message, loglevel) {
+    if (this.loggingLevel == 0) {
+      console.log(`[SPHclient] (${this.username}) : ${message}`)
+    } else if (this.loggingLevel == 1 && loglevel == 1) {
+      console.log(`[SPHclient] (${this.username}) : ${message}`)
+    } else if (this.loggingLevel == 2) {
+      return;
+    } 
   }
 }
 
