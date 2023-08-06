@@ -5,15 +5,17 @@
  * @param {number} loggingLevel 0=debug; 1=normal; 2=silent;
  */
 class SPHclient {
-  #loginURL;
+  AJAX_LOGIN_INTERVAL_TIME = 30000 // 30s
+  ajaxInterval;
+  logged_in = false;
+  cookies = {};
 
-  constructor(username, password, schoolID, loggingLevel=1) {
+  constructor(username, password, schoolID, loggingLevel = 1) {
     this.username = username;
     this.password = password;
     this.schoolID = schoolID;
     this.loggingLevel = loggingLevel
-    this.#loginURL = `https://login.schulportal.hessen.de/?i=${schoolID}`;
-    this.cookies = {};
+    this.loginURL = `https://login.schulportal.hessen.de/?i=${schoolID}`; // maybe start.schu... for some schools
   }
 
 
@@ -22,7 +24,10 @@ class SPHclient {
    * @param {callback} callback 
    */
   authenticate(callback) {
-    fetch(this.#loginURL, {
+    if (this.logged_in) {
+      throw new Error("Client already authenticated!");
+    }
+    fetch(this.loginURL, {
       headers: {
         "content-type": "application/x-www-form-urlencoded",
       },
@@ -50,17 +55,29 @@ class SPHclient {
               }
             }).then((response) => {
               this.parseSetCookieHeader(response.headers.get("set-cookie"));
+
+              this.ajaxInterval = setInterval(() => { this.ajaxLogin() }, this.AJAX_LOGIN_INTERVAL_TIME);
+              this.logged_in = true;
+
               this.log(`authenticated successful with sid=${this.cookies.sid.value}`, 1);
               callback();
             });
           } else {
             this.log("error during auth request 2", 0);
-            throw Error("Unexpected error during request");
+
+            clearInterval(this.ajaxInterval);
+            this.logged_in = false;
+
+            throw new Error("Unexpected error during request");
           }
         })
       } else {
         this.log("error during auth request 1", 0);
-        throw Error("Wrong credentials or the lanis team changed the API again ;D");
+
+        clearInterval(this.ajaxInterval);
+        this.logged_in = false;
+
+        throw new Error("Wrong credentials or the lanis team changed the API again ;D");
       }
     })
   }
@@ -70,6 +87,9 @@ class SPHclient {
    * @param {callback} callback 
    */
   logout(callback) {
+    if(!this.logged_in) {
+      throw new Error("Client not authenticated!")
+    }
     const url = "https://start.schulportal.hessen.de/index.php?logout=all";
 
     fetch(url, {
@@ -79,6 +99,9 @@ class SPHclient {
       }
     }).then(response => {
       this.parseSetCookieHeader(response.headers.get("set-cookie"));
+
+      clearInterval(this.ajaxInterval);
+      this.logged_in = false;
 
       this.log(`deauthenticated successful.`, 1);
       callback();
@@ -120,8 +143,27 @@ class SPHclient {
       .join(', ');
   }
 
+  async ajaxLogin() {
+    let response = await fetch("https://start.schulportal.hessen.de/ajax_login.php", {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      },
+      referrer: "https://start.schulportal.hessen.de/index.php",
+      body: `name=${this.cookies.sid.value}`,
+      method: "POST"
+    });
+
+    let responseText = await response.text();
+    if (responseText) {
+      this.log(`AJAX-login returned code: ${await response.text()}`);
+    } else {
+      this.log(`AJAX-login failed! Session not valid.`, 1);
+      throw new Error("AJAX-login failed! Maybe the session has expired")
+    }
+  }
+
   /**
-   * @param {date} date example: 05.09.2023
+   * @param {date} date
    * @param {callback} callback returns an object with all Vplan data available for this date
    */
   getVplan(date, callback) {
@@ -141,13 +183,12 @@ class SPHclient {
       body: formData
     })
       .then(response => response.json())
-      .then(data => callback(data))
+      .then(data => { this.log("downloaded vPlan"); callback(data) })
       .catch(error => console.error(error));
   }
-  
+
 
   /**
-   * 
    * @param {date} start the start date
    * @param {date} end the end date
    * @param {callback} callback callback with all the calendar data
@@ -177,14 +218,14 @@ class SPHclient {
    * @param {string} message
    * @param {number} loglevel
    */
-  log(message, loglevel) {
+  log(message, loglevel = 0) {
     if (this.loggingLevel == 0) {
-      console.log(`[SPHclient] (${this.username}) : ${message}`)
+      console.log(`[SPHclient] ${(new Date()).toLocaleString("en-CH")} (${this.schoolID}.${this.username}) : ${message}`)
     } else if (this.loggingLevel == 1 && loglevel == 1) {
-      console.log(`[SPHclient] (${this.username}) : ${message}`)
+      console.log(`[SPHclient] ${(new Date()).toLocaleString("en-CH")} (${this.schoolID}.${this.username}) : ${message}`)
     } else if (this.loggingLevel == 2) {
       return;
-    } 
+    }
   }
 }
 
