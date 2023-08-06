@@ -47,3 +47,23 @@ client.authenticate(()=>{
 
 <a href="https://info.schulportal.hessen.de/">algemeine Info (Server Status / Updates / ganz bissen Doumentation)</a>
 
+## API
+
+### <code>SPHclient(username, password, schoolID, loggingLevel = 1)</code>
+Die SPHclient Klasse ist die schnittstelle zwichen Code und der Lanis API.
+
+- username: some.name
+- password: yourPWD123
+- schoolID: deine Schulnummer
+
+### <code>SPHclient.authenticate(callback)</code>
+Für alle weiteren API calls muss eine Authentifizierung statt gefunden haben. Alle weiteren Anfragen müssen erfolgen nachdem <code>callback</code> aufgerufen wurde.
+
+### <code>SPHclient.logout(callback)</code>
+Beendet die Aktuelle sitzung. Eine Reauthentifizierung mit <code>authenticate()</code> ist danach möglich.
+
+### <code>SPHclient.getVplan(date, callback)</code>
+Gibt den geammten Vertretungplan der Schule als Objekt zurück. <code>date</code> muss ein <code>Date()</code> objekt sein. <code>callback</code> gibt den Vertretungsplan zurück.
+
+### <code>SPHclient.getCalendar(start, end, callback)</code>
+Gibt den online Kalender der Schule als Objekt zurück. <code>start</code> und <code>end</code> sind beides <code>Date()</code> objekte, die den Zeitram bestimmen. <code>callback</code> gibt den Kalender zurück.
