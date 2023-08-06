@@ -2,6 +2,10 @@
   "name": "sphclient",
   "version": "1.1.0",
   "main": "SPHclient.js",
+  "files": [
+    "SPHclient.js",
+    "readme.md"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alessioC42/SPHclient.git"

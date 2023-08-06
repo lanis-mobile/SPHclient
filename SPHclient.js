@@ -2,6 +2,7 @@
  * @param {string} username user.name
  * @param {string} password mypass123
  * @param {number} schoolID 5182
+ * @param {number} loggingLevel 0=debug; 1=normal; 2=silent;
  */
 class SPHclient {
   #loginURL;
@@ -121,7 +122,8 @@ class SPHclient {
    * @param {callback} callback returns an object with all Vplan data available for this date
    */
   getVplan(date, callback) {
-
+    date = date.toLocaleDateString("en-CH"); // format: dd.mm.jjjj
+    console.log(date);
     const url = `https://start.schulportal.hessen.de/vertretungsplan.php?ganzerPlan=true&tag=${date}`;
     const formData = new URLSearchParams();
     formData.append("tag", date);
