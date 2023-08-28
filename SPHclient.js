@@ -1,3 +1,5 @@
+import("node-fetch")
+
 /**
  * @param {string} username user.name
  * @param {string} password mypass123
@@ -189,7 +191,42 @@ class SPHclient {
       .then(data => { callback(data) })
       .catch(error => console.error(error));
   }
+  
+  /**
+   * @param {date} date
+   * @param {callback} callback returns an object with all Vplan data available for this date
+   */
 
+  getNextVplanDate(callback) {
+    fetch("https://start.schulportal.hessen.de/vertretungsplan.php", {
+      headers: {
+        "Host": "start.schulportal.hessen.de",
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Cookie": "sph-login-upstream=4;schulportal_lastschool=" + this.schoolID + "; i=" + this.schoolID + "; sid=" + this.cookies.sid.value
+      },
+      method : "GET"
+    }).then(response => {
+      response.text().then(text => {
+        const datePattern = /data-tag="(\d{2})\.(\d{2})\.(\d{4})"/;
+
+        // Extracting the date using the regular expression
+        const match = text.match(datePattern);
+
+        if (match) {
+          const day = parseInt(match[1]);
+          const month = parseInt(match[2]) - 1; // Months are 0-indexed in Date objects
+          const year = parseInt(match[3]);
+          
+          // Creating a Date object
+          const extractedDate = new Date(year, month, day);
+
+          callback(extractedDate);
+        } else {
+          callback(null);
+        }
+      })
+    })
+  }
 
   /**
    * @param {date} start the start date
