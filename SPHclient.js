@@ -6,7 +6,7 @@ import("node-fetch")
  * @param {number} schoolID 5182
  * @param {number} loggingLevel 0=debug; 1=normal; 2=silent;
  */
-class SPHclient {
+export class SPHclient {
   AJAX_LOGIN_INTERVAL_TIME = 30000 // 30s
   ajaxInterval;
   logged_in = false;
