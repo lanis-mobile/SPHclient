@@ -4,6 +4,7 @@
   "main": "SPHclient.js",
   "files": [
     "SPHclient.js",
+    "SPHclient.d.js",
     "readme.md"
   ],
   "repository": {
