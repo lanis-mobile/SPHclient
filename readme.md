@@ -19,27 +19,21 @@ npm i sphclient
 ```
 
 ```javascript
+
 const SPHclient = require("sphclient");
+const secrets = require("./secrets.json");
 
-// erstelle ein neues Client objekt mit Benutzername Passwort und Schulnummer
-const client = new SPHclient("user.name", "mypass123", 5182);
+const client = new SPHclient(secrets.username, secrets.password, secrets.schoolID);
 
-// warte den Login ab und erhalte anschließend den Vertretungsplan.
-client.authenticate(() => {
-  client.getNextVplanDate((date) => {
-    client.getVplan(date, (vplan) => {
-      //die "vplan" Variable enthällt den gesammten Vertretungsplan der Schule.
+async function getPlan() {
+    await client.authenticate();
+    let date = await client.getNextVplanDate();
+    let plan = await client.getVplan(date);
+    console.log(plan);
 
-      //die Daten verwenden
-      if (somethingForMeInPlan(vplan)) {
-        myPhoneConnection.send(vplan);
-      }
-
-      //die Sitzung beenden
-      client.logout();
-    });
-  });
-});
+    await client.logout();
+}
+getPlan()
 ```
 
 ## hilfreiche Links
@@ -56,28 +50,28 @@ client.authenticate(() => {
 
 ### <code>SPHclient(username, password, schoolID, loggingLevel = 1)</code>
 
-Die SPHclient Klasse ist die schnittstelle zwichen Code und der Lanis API.
+Die SPHclient-Klasse ist die Schnittstelle zwischen dem Code und der Lanis-API.
 
-- username: some.name
-- password: yourPWD123
-- schoolID: deine Schulnummer
+- `username`: Benutzername
+- `password`: Passwort
+- `schoolID`: Schulnummer
 
-### <code>SPHclient.authenticate(callback)</code>
+### <code>SPHclient.authenticate()</code>
 
-Für alle weiteren API calls muss eine Authentifizierung statt gefunden haben. Alle weiteren Anfragen müssen erfolgen nachdem <code>callback</code> aufgerufen wurde.
+Für alle weiteren API-Aufrufe muss eine Authentifizierung erfolgen. Alle weiteren Anfragen können erst nach dem Aufruf von `authenticate()` durchgeführt werden.
 
-### <code>SPHclient.logout(callback)</code>
+### <code>SPHclient.logout()</code>
 
-Beendet die Aktuelle sitzung. Eine Reauthentifizierung mit <code>authenticate()</code> ist danach möglich.
+Beendet die aktuelle Sitzung. Nach dem Ausloggen kann eine erneute Authentifizierung mit `authenticate()` durchgeführt werden.
 
-### <code>SPHclient.getVplan(date, callback)</code>
+### <code>SPHclient.getVplan(date)</code>
 
-Gibt den geammten Vertretungplan der Schule als Objekt zurück. <code>date</code> muss ein <code>Date()</code> objekt sein. <code>callback</code> gibt den Vertretungsplan zurück.
+Gibt den gesamten Vertretungsplan der Schule als Objekt zurück. `date` muss ein `Date()`-Objekt sein. Diese Methode gibt ein Promise zurück, das den Vertretungsplan enthält.
 
-### <code>SPHclient.getCalendar(start, end, callback)</code>
+### <code>SPHclient.getCalendar(start, end)</code>
 
-Gibt den online Kalender der Schule als Objekt zurück. <code>start</code> und <code>end</code> sind beides <code>Date()</code> objekte, die den Zeitram bestimmen. <code>callback</code> gibt den Kalender zurück.
+Gibt den Online-Kalender der Schule als Objekt zurück. `start` und `end` sind beide `Date()`-Objekte, die den Zeitraum bestimmen. Diese Methode gibt ein Promise zurück, das den Kalender enthält.
 
-### <code>client.getNextVplanDate(callback)</code>
+### <code>SPHclient.getNextVplanDate()</code>
 
-Gibt das datum des akutuell angezeigten Vertretungsplan auf der Website als <code>Date()</code> objekt zurück.
+Gibt das Datum des aktuell angezeigten Vertretungsplans auf der Website als `Date()`-Objekt zurück. Diese Methode gibt ein Promise zurück, das das Datum enthält.
