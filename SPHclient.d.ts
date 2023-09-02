@@ -1,17 +1,11 @@
-declare module "SPHclient" {
+declare module 'sphclient' {
   export class SPHclient {
     constructor(username: string, password: string, schoolID: number, loggingLevel?: number);
-
     authenticate(): Promise<void>;
     logout(): Promise<void>;
-    getVplan(date: Date | any): Promise<any>; // Replace 'any' with your actual Vplan data type
+    getVplan(date: Date | any): Promise<Object>; // Replace 'any' with your actual Vplan data type
     getNextVplanDate(): Promise<Date | null>;
-    getCalendar(start: Date, end: Date): Promise<any>; // Replace 'any' with your actual calendar data type
-
-    // You can define other methods and properties as needed
-
-    // Add your type definitions for class properties here
+    getCalendar(start: Date, end: Date): Promise<Object>; // Replace 'any' with your actual calendar data type
   }
-
   export default SPHclient;
 }
