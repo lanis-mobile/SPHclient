@@ -1,6 +1,6 @@
 declare module 'sphclient' {
   export class SPHclient {
-    constructor(username: string, password: string, schoolID: number, loggingLevel?: number);
+    constructor(username: string | any, password: string | any, schoolID: number | any, loggingLevel?: number);
     authenticate(): Promise<void>;
     logout(): Promise<void>;
     getVplan(date: Date | any): Promise<Object>; // Replace 'any' with your actual Vplan data type
