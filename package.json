@@ -7,6 +7,7 @@
     "SPHclient.d.ts",
     "readme.md"
   ],
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alessioC42/SPHclient.git"

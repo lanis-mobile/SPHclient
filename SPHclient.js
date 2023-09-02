@@ -264,5 +264,3 @@ export class SPHclient {
     }
   }
 }
-
-export default SPHclient;
