@@ -1,4 +1,4 @@
-export class SPHclient {
+class SPHclient {
   AJAX_LOGIN_INTERVAL_TIME = 30000; // 30s
   ajaxInterval;
   logged_in = false;
@@ -264,3 +264,5 @@ export class SPHclient {
     }
   }
 }
+
+module.exports = SPHclient;

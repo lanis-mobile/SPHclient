@@ -4,10 +4,9 @@
   "main": "SPHclient.js",
   "files": [
     "SPHclient.js",
-    "SPHclient.d.ts",
-    "readme.md"
+    "readme.md",
+    "LICENSE"
   ],
-  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alessioC42/SPHclient.git"
