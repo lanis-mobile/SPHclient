@@ -1,6 +1,6 @@
 {
   "name": "sphclient",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "main": "SPHclient.js",
   "files": [
     "SPHclient.js",
