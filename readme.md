@@ -45,6 +45,8 @@ getPlan()
 
 <a href="https://info.schulportal.hessen.de/">algemeine Info (Server Status / Updates / ganz bissen Doumentation)</a>
 
+<a href="https://info.schulportal.hessen.de/datenschutzerklaerung">Lanis Datenschutzerklärung (unten stehen alle cookies definiert)</a>
+
 ## API
 
 ### <code>SPHclient(username, password, schoolID, loggingLevel = 1)</code>
