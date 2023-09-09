@@ -1,13 +1,15 @@
 class SPHclient {
   logged_in = false;
   cookies = {};
+  stayLoggedInBodyOption = "";
 
-  constructor(username, password, schoolID, loggingLevel = 1) {
+  constructor(username, password, schoolID, stayLoggedIn = false, loggingLevel = 1) {
     this.username = username;
     this.password = password;
     this.schoolID = schoolID;
     this.loggingLevel = loggingLevel;
-    this.loginURL = `https://login.schulportal.hessen.de/?i=${schoolID}`;
+
+    if (stayLoggedIn) {this.stayLoggedInBodyOption = "stayconnected=1"}
   }
 
   async authenticate() {
@@ -16,7 +18,7 @@ class SPHclient {
     }
 
     try {
-      const response = await fetch(this.loginURL, {
+      const response = await fetch(`https://login.schulportal.hessen.de/?i=${this.schoolID}&${this.stayLoggedInBodyOption}`, {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
         },
@@ -27,11 +29,18 @@ class SPHclient {
         method: "POST",
       });
 
-      if (response.headers.has("location")) {
+      let skipVerification
+      if (stayLoggedIn) {
+        skipVerification = true;
+      } else {
+        skipVerification = response.headers.has("location");
+      }
+
+      if (skipVerification) {
         this.parseSetCookieHeader(response.headers.get("set-cookie"));
         this.log("auth request 1 successful.", 0);
 
-        const response2 = await fetch(response.headers.get("location"), {
+        const response2 = await fetch("https://connect.schulportal.hessen.de"  /*response.headers.get("location")*/, {
           redirect: "manual",
           method: "GET",
           headers: {
