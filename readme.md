@@ -37,16 +37,17 @@ getPlan()
 
 ## hilfreiche Links
 
-<a href="https://support.schulportal.hessen.de/knowledgebase.php">lanis Helpcenter</a>
+- <a href="https://support.schulportal.hessen.de/knowledgebase.php">lanis Helpcenter</a>
 
-<a href="https://support.schulportal.hessen.de/knowledgebase.php?article=1087">mögliche Loginprobleme mit einigen Schulen</a>
+- <a href="https://support.schulportal.hessen.de/knowledgebase.php?article=1087">mögliche Loginprobleme mit einigen Schulen</a>
 
-<a href="https://info.schulportal.hessen.de/das-sph/sph-ueberblick/sph-lernsys/"> alle "Apps" innerhalb des Schulportal Hessen. (Konfiguation variiert nach Schule)</a>
+- <a href="https://info.schulportal.hessen.de/das-sph/sph-ueberblick/sph-lernsys/"> alle "Apps" innerhalb des Schulportal Hessen. (Konfiguation variiert nach Schule)</a>
 
-<a href="https://info.schulportal.hessen.de/">algemeine Info (Server Status / Updates / ganz bissen Doumentation)</a>
+- <a href="https://info.schulportal.hessen.de/">algemeine Info (Server Status / Updates / ganz bissen Doumentation)</a>
 
-<a href="https://info.schulportal.hessen.de/datenschutzerklaerung">Lanis Datenschutzerklärung (unten stehen alle cookies definiert)</a>
-
+- <a href="https://info.schulportal.hessen.de/datenschutzerklaerung">Lanis Datenschutzerklärung</a>
+  - Session nur 100 min gültig
+  - unten stehen alle Cookies definiert
 ## API
 
 ### <code>SPHclient(username, password, schoolID, loggingLevel = 1)</code>
