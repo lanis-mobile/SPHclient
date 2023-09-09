@@ -1,16 +1,15 @@
 class SPHclient {
-  AJAX_LOGIN_INTERVAL_TIME = 120000; // 2m
-  ajaxInterval;
   logged_in = false;
   cookies = {};
+  stayLoggedInBodyOption = "";
 
-  constructor(username, password, schoolID, loggingLevel = 1, useajaxlogin = false) {
+  constructor(username, password, schoolID, stayLoggedIn = false, loggingLevel = 1) {
     this.username = username;
     this.password = password;
     this.schoolID = schoolID;
     this.loggingLevel = loggingLevel;
-    this.useajaxlogin = useajaxlogin;
-    this.loginURL = `https://login.schulportal.hessen.de/?i=${schoolID}`;
+
+    if (stayLoggedIn) {this.stayLoggedInBodyOption = "stayconnected=1"}
   }
 
   async authenticate() {
@@ -19,7 +18,7 @@ class SPHclient {
     }
 
     try {
-      const response = await fetch(this.loginURL, {
+      const response = await fetch(`https://login.schulportal.hessen.de/?i=${this.schoolID}&${this.stayLoggedInBodyOption}`, {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
         },
@@ -30,11 +29,18 @@ class SPHclient {
         method: "POST",
       });
 
-      if (response.headers.has("location")) {
+      let skipVerification
+      if (stayLoggedIn) {
+        skipVerification = true;
+      } else {
+        skipVerification = response.headers.has("location");
+      }
+
+      if (skipVerification) {
         this.parseSetCookieHeader(response.headers.get("set-cookie"));
         this.log("auth request 1 successful.", 0);
 
-        const response2 = await fetch(response.headers.get("location"), {
+        const response2 = await fetch("https://connect.schulportal.hessen.de"  /*response.headers.get("location")*/, {
           redirect: "manual",
           method: "GET",
           headers: {
@@ -54,29 +60,16 @@ class SPHclient {
           });
 
           this.parseSetCookieHeader(response3.headers.get("set-cookie"));
-          if (this.useajaxlogin) {
-            this.ajaxInterval = setInterval(() => {
-            this.ajaxLogin();
-          }, this.AJAX_LOGIN_INTERVAL_TIME);
-          }
           
           this.logged_in = true;
           this.log(`authenticated successful with sid=${this.cookies.sid.value}`, 1);
         } else {
           this.log("error during auth request 2", 0);
-          if(this.useajaxlogin) {
-            clearInterval(this.ajaxInterval);
-          }
-          
           this.logged_in = false;
           throw new Error("Unexpected error during request");
         }
       } else {
         this.log("error during auth request 1", 0);
-        if (this.useajaxlogin) {
-          clearInterval(this.ajaxInterval);
-        }
-        
         this.logged_in = false;
         throw new Error("Wrong credentials or the lanis team changed the API again ;D");
       }
@@ -101,9 +94,6 @@ class SPHclient {
       });
 
       this.parseSetCookieHeader(response.headers.get("set-cookie"));
-      if (this.useajaxlogin) {
-        clearInterval(this.ajaxInterval);
-      }
       
       this.logged_in = false;
       this.log(`deauthenticated successful.`, 1);
@@ -141,34 +131,6 @@ class SPHclient {
       .join(", ");
   }
 
-  async ajaxLogin() {
-    try {
-      const response = await fetch("https://start.schulportal.hessen.de/ajax_login.php", {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        },
-        referrer: "https://start.schulportal.hessen.de/index.php",
-        body: `name=${this.cookies.sid.value}`,
-        method: "POST",
-      });
-
-      const responseText = await response.text();
-
-      if (responseText) {
-        this.log(`AJAX-login returned code: ${await response.text()}`);
-      } else {
-        this.log(`AJAX-login failed! Session not valid.`, 1);
-        this.logout();
-        if (this.useajaxlogin) {
-          clearInterval(this.ajaxInterval);
-        }
-        
-        throw new Error("AJAX-login failed! Maybe the session has expired");
-      }
-    } catch (error) {
-      this.log(error);
-    }
-  }
 
   async getVplan(date) {
     date = date.toLocaleDateString("en-CH");
