@@ -30,7 +30,7 @@ class SPHclient {
       });
 
       let skipVerification
-      if (stayLoggedIn) {
+      if (this.stayLoggedIn) {
         skipVerification = true;
       } else {
         skipVerification = response.headers.has("location");
