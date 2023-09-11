@@ -74,6 +74,6 @@ Gibt den gesamten Vertretungsplan der Schule als Objekt zurück. `date` muss ein
 
 Gibt den Online-Kalender der Schule als Objekt zurück. `start` und `end` sind beide `Date()`-Objekte, die den Zeitraum bestimmen. Diese Methode gibt ein Promise zurück, das den Kalender enthält.
 
-### <code>SPHclient.getNextVplanDate()</code>
+### <code>SPHclient.getVplanDates()</code>
 
-Gibt das Datum des aktuell angezeigten Vertretungsplans auf der Website als `Date()`-Objekt zurück. Diese Methode gibt ein Promise zurück, das das Datum enthält.
+Gibt die aktuell verfügbaren Termine angezeigten Vertretungsplans auf der Website als `Date()`-Objekt Array zurück. Diese Methode gibt ein Promise zurück, das ein Array enthält.

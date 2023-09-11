@@ -164,7 +164,7 @@ class SPHclient {
     }
   }
 
-  async getNextVplanDate() {
+  async getVplanDates() {
     try {
       const response = await fetch("https://start.schulportal.hessen.de/vertretungsplan.php", {
         headers: {
@@ -180,25 +180,32 @@ class SPHclient {
         },
         method: "GET",
       });
-
+  
       const text = await response.text();
-      const datePattern = /data-tag="(\d{2})\.(\d{2})\.(\d{4})"/;
-      const match = text.match(datePattern);
-
-      if (match) {
+      const datePattern = /data-tag="(\d{2})\.(\d{2})\.(\d{4})"/g;
+      const matches = [...text.matchAll(datePattern)]; // Convert to an array for easier access
+  
+      const uniqueDates = []; // Array to store unique date objects
+  
+      for (const match of matches) {
         const day = parseInt(match[1]);
         const month = parseInt(match[2]) - 1;
         const year = parseInt(match[3]);
         const extractedDate = new Date(year, month, day);
-        return extractedDate;
-      } else {
-        return null;
+  
+        // Check if the date is not already in the uniqueDates array
+        if (!uniqueDates.some((date) => date.getTime() === extractedDate.getTime())) {
+          uniqueDates.push(extractedDate);
+        }
       }
+      
+      return uniqueDates;
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
+  
 
   async getCalendar(start, end) {
     const url = `https://start.schulportal.hessen.de/kalender.php`;
