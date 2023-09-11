@@ -19,19 +19,29 @@ npm i sphclient
 ```
 
 ```javascript
-const SPHclient = require("sphclient");
-const secrets = require("./secrets.json");
+const SPHclient = require("./SPHclient");
+const secrets = require("./secrets.json")
 
-const client = new SPHclient(secrets.username, secrets.password, secrets.schoolID);
+const client = new SPHclient(secrets.username, secrets.password, secrets.schoolid);
 
-async function getPlan() {
-    await client.authenticate();
-    let date = await client.getNextVplanDate();
-    let plan = await client.getVplan(date);
-    console.log(plan);
+client.authenticate().then(() => {
+    client.getVplanDates().then(dates => {
 
-    await client.logout();
-}
+        const fetchPromises = [];
+
+        dates.forEach(date => {
+            console.log("fetching date: " + date);
+            const promise = client.getVplan(date);
+            fetchPromises.push(promise);
+        });
+
+        Promise.all(fetchPromises).then(plans => {
+            const fullplan = [].concat(...plans);
+            console.log(fullplan);
+        })
+    });
+});
+
 getPlan()
 ```
 
