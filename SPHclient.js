@@ -8,6 +8,7 @@ class SPHclient {
     this.password = password;
     this.schoolID = schoolID;
     this.loggingLevel = loggingLevel;
+    this.stayLoggedIn = stayLoggedIn;
 
     if (stayLoggedIn) {this.stayLoggedInBodyOption = "stayconnected=1"}
   }
@@ -156,8 +157,7 @@ class SPHclient {
         body: formData,
       });
 
-      const data = await response.json();
-      return data;
+      return await response.json();
     } catch (error) {
       console.error(error);
       throw error;
@@ -231,8 +231,7 @@ class SPHclient {
         body: formData,
       });
 
-      const data = await response.json();
-      return data;
+      return await response.json();
     } catch (error) {
       console.error(error);
       throw error;
