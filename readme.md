@@ -41,8 +41,6 @@ client.authenticate().then(() => {
         })
     });
 });
-
-getPlan()
 ```
 
 ## hilfreiche Links
