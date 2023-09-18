@@ -2,6 +2,9 @@
 
 Ein nodejs modul um mit dem Hessischen Schulporal zu interagieren.
 
+## Auch interessant:
+Android APP: https://github.com/alessioC42/SPH-vertretungsplan
+
 ## Features
 
 - [x] login / logout
