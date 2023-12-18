@@ -1,9 +1,14 @@
+## currently dead
+This project is currently inactive. Currently, my focus is on [lanis-mobile](https://github.com/alessioC42/lanis-mobile).
+Although the code in this repository may work, it is not of high quality. For a better interface, please check out [LanisAPI](https://github.com/kurwjan/LanisAPI) by kurwjan.
+Additionally, some features in the app may have been reverse-engineered. Take a look at this file for a comprehensive collection of SPH parsing: https://github.com/alessioC42/lanis-mobile/blob/main/app/lib/client/client.dart. For encryption, refer to this file: https://github.com/alessioC42/lanis-mobile/blob/main/app/lib/client/cryptor.dart, created by kurwjan.
+
 # SPHclient
 
 Ein nodejs modul um mit dem Hessischen Schulporal zu interagieren.
 
 ## Auch interessant:
-Android APP: https://github.com/alessioC42/SPH-vertretungsplan
+Android APP: https://github.com/alessioC42/lanis-mobile
 
 ## Features
 
