@@ -1,2 +1,5 @@
 secrets.json
 test.js
+dist/
+node_modules/
+.idea/

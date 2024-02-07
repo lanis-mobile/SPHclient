@@ -1,9 +1,11 @@
 {
   "name": "sphclient",
   "version": "3.0.1",
-  "main": "SPHclient.js",
+  "main": "dist/SPHclient.js",
+  "typings": "dist/SPHclient.d.ts",
   "files": [
     "SPHclient.js",
+    "SPHclient.d.js",
     "readme.md",
     "LICENSE"
   ],
@@ -12,9 +14,22 @@
     "url": "git+https://github.com/alessioC42/SPHclient.git"
   },
   "author": "Alessio Caputo",
+  "contributors": [
+    {
+      "email": "info@trickfilm400.de",
+      "name": "Trickfilm400",
+      "url": "https://trickfilm400.de"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/alessioC42/SPHclient/issues"
   },
-  "homepage": "https://github.com/alessioC42/SPHclient"
+  "homepage": "https://github.com/alessioC42/SPHclient",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
 }
