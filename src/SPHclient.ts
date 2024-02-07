@@ -1,15 +1,9 @@
 class SPHclient {
   logged_in = false;
-  cookies = {};
+  cookies: any = {};
   stayLoggedInBodyOption = "";
 
-  constructor(username, password, schoolID, stayLoggedIn = false, loggingLevel = 1) {
-    this.username = username;
-    this.password = password;
-    this.schoolID = schoolID;
-    this.loggingLevel = loggingLevel;
-    this.stayLoggedIn = stayLoggedIn;
-
+  constructor(private username: string, private password: string, private schoolID: number, private stayLoggedIn = false, private loggingLevel = 1) {
     if (stayLoggedIn) {this.stayLoggedInBodyOption = "stayconnected=1"}
   }
 
@@ -38,7 +32,7 @@ class SPHclient {
       }
 
       if (skipVerification) {
-        this.parseSetCookieHeader(response.headers.get("set-cookie"));
+        this.parseSetCookieHeader(response.headers.get("set-cookie")!);
         this.log("auth request 1 successful.", 0);
 
         const response2 = await fetch("https://connect.schulportal.hessen.de"  /*response.headers.get("location")*/, {
@@ -52,7 +46,7 @@ class SPHclient {
         if (response2.headers.get("location")) {
           this.log("auth request 2 successful.", 0);
 
-          const response3 = await fetch(response2.headers.get("location"), {
+          const response3 = await fetch(response2.headers.get("location")!, {
             method: "GET",
             redirect: "manual",
             headers: {
@@ -60,7 +54,7 @@ class SPHclient {
             },
           });
 
-          this.parseSetCookieHeader(response3.headers.get("set-cookie"));
+          this.parseSetCookieHeader(response3.headers.get("set-cookie")!);
           
           this.logged_in = true;
           this.log(`authenticated successful with sid=${this.cookies.sid.value}`, 1);
@@ -94,7 +88,7 @@ class SPHclient {
         },
       });
 
-      this.parseSetCookieHeader(response.headers.get("set-cookie"));
+      this.parseSetCookieHeader(response.headers.get("set-cookie")!);
       
       this.logged_in = false;
       this.log(`deauthenticated successful.`, 1);
@@ -103,7 +97,7 @@ class SPHclient {
     }
   }
 
-  parseSetCookieHeader(setCookieHeader) {
+  parseSetCookieHeader(setCookieHeader: string) {
     const cookiesArray = setCookieHeader.split(",");
 
     cookiesArray.forEach((cookieString) => {
@@ -133,8 +127,8 @@ class SPHclient {
   }
 
 
-  async getVplan(date) {
-    date = date.toLocaleDateString("en-CH");
+  async getVplan(_date: Date) {
+    const date = _date.toLocaleDateString("en-CH");
     const url = `https://start.schulportal.hessen.de/vertretungsplan.php?ganzerPlan=true&tag=${date}`;
     const formData = new URLSearchParams();
     formData.append("tag", date);
@@ -185,7 +179,7 @@ class SPHclient {
       const datePattern = /data-tag="(\d{2})\.(\d{2})\.(\d{4})"/g;
       const matches = [...text.matchAll(datePattern)]; // Convert to an array for easier access
   
-      const uniqueDates = []; // Array to store unique date objects
+      const uniqueDates: Date[] = []; // Array to store unique date objects
   
       for (const match of matches) {
         const day = parseInt(match[1]);
@@ -207,7 +201,7 @@ class SPHclient {
   }
   
 
-  async getCalendar(start, end) {
+  async getCalendar(start: Date, end: Date) {
     const url = `https://start.schulportal.hessen.de/kalender.php`;
     const formData = new URLSearchParams();
     formData.append("f", "getEvents");
@@ -238,7 +232,7 @@ class SPHclient {
     }
   }
 
-  log(message, loglevel = 0) {
+  log(message: string, loglevel = 0) {
     if (this.loggingLevel == 0) {
       console.log(`[SPHclient] ${(new Date()).toLocaleString("en-CH")} (${this.schoolID}.${this.username}) : ${message}`)
     } else if (this.loggingLevel == 1 && loglevel == 1) {
@@ -248,5 +242,6 @@ class SPHclient {
     }
   }
 }
-
-module.exports = SPHclient;
+export {
+  SPHclient
+}
