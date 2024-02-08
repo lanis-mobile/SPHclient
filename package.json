@@ -1,6 +1,6 @@
 {
   "name": "sphclient",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "main": "dist/SPHclient.js",
   "typings": "dist/SPHclient.d.ts",
   "files": [
