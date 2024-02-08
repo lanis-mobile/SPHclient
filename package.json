@@ -4,8 +4,7 @@
   "main": "dist/SPHclient.js",
   "typings": "dist/SPHclient.d.ts",
   "files": [
-    "SPHclient.js",
-    "SPHclient.d.js",
+    "dist/",
     "readme.md",
     "LICENSE"
   ],
