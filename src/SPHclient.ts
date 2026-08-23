@@ -1,6 +1,6 @@
 class SPHclient {
   logged_in = false;
-  cookies: any = {};
+  cookies: Record<string, Record<string, string | boolean>> = {};
   stayLoggedInBodyOption = "";
 
   constructor(private username: string, private password: string, private schoolID: number, private stayLoggedIn = false, private loggingLevel = 1, private userAgent = "Lanis-Mobile/v4+SPHClient-ts") {
@@ -40,7 +40,7 @@ class SPHclient {
           redirect: "manual",
           method: "GET",
           headers: {
-            cookie: this.getCookieHeader(),
+            cookie: this.getAccountActionCookieHeader(),
             "User-Agent": this.userAgent
           },
         });
@@ -52,7 +52,7 @@ class SPHclient {
             method: "GET",
             redirect: "manual",
             headers: {
-              cookie: this.getCookieHeader(),
+              cookie: this.getAccountActionCookieHeader(),
               "User-Agent": this.userAgent
             },
           });
@@ -87,7 +87,7 @@ class SPHclient {
       const response = await fetch(url, {
         method: "GET",
         headers: {
-          cookie: this.getCookieHeader(),
+          cookie: this.getAccountActionCookieHeader(),
           "User-Agent": this.userAgent
         },
       });
@@ -116,7 +116,10 @@ class SPHclient {
     });
   }
 
-  getCookieHeader() {
+  /**
+   * Get all Cookies for Login + Logout Actions
+   */
+  getAccountActionCookieHeader() {
     return Object.keys(this.cookies)
       .map((name) => {
         const cookie = this.cookies[name];
@@ -128,6 +131,10 @@ class SPHclient {
         return `${name}=${cookie.value}; ${options}`;
       })
       .join(", ");
+  }
+
+  getSimpleCookieHeader() {
+    return `sph-login-upstream=4;schulportal_lastschool=${this.schoolID}; i=${this.schoolID}; sid=${this.cookies.sid.value}`;
   }
 
 
@@ -145,13 +152,7 @@ class SPHclient {
           Host: "start.schulportal.hessen.de",
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
           "User-Agent": this.userAgent,
-          Cookie:
-            "sph-login-upstream=4;schulportal_lastschool=" +
-            this.schoolID +
-            "; i=" +
-            this.schoolID +
-            "; sid=" +
-            this.cookies.sid.value,
+          Cookie: this.getSimpleCookieHeader()
         },
         body: formData,
       });
@@ -170,13 +171,7 @@ class SPHclient {
           Host: "start.schulportal.hessen.de",
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
           "User-Agent": this.userAgent,
-          Cookie:
-            "sph-login-upstream=4;schulportal_lastschool=" +
-            this.schoolID +
-            "; i=" +
-            this.schoolID +
-            "; sid=" +
-            this.cookies.sid.value,
+          Cookie: this.getSimpleCookieHeader()
         },
         method: "GET",
       });
@@ -221,13 +216,7 @@ class SPHclient {
           Host: "start.schulportal.hessen.de",
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
           "User-Agent": this.userAgent,
-          Cookie:
-            "sph-login-upstream=4;schulportal_lastschool=" +
-            this.schoolID +
-            "; i=" +
-            this.schoolID +
-            "; sid=" +
-            this.cookies.sid.value,
+          Cookie: this.getSimpleCookieHeader()
         },
         body: formData,
       });
