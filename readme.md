@@ -1,14 +1,15 @@
-## currently dead
-This project is currently inactive. Currently, my focus is on [lanis-mobile](https://github.com/alessioC42/lanis-mobile).
-Although the code in this repository may work, it is not of high quality. For a better interface, please check out [LanisAPI](https://github.com/kurwjan/LanisAPI) by kurwjan.
-Additionally, some features in the app may have been reverse-engineered. Take a look at this file for a comprehensive collection of SPH parsing: https://github.com/alessioC42/lanis-mobile/blob/main/app/lib/client/client.dart. For encryption, refer to this file: https://github.com/alessioC42/lanis-mobile/blob/main/app/lib/client/cryptor.dart, created by kurwjan.
-
 # SPHclient
 
-Ein nodejs modul um mit dem Hessischen Schulporal zu interagieren.
+Ein nodejs modul um mit dem Hessischen Schulportal zu interagieren.
+
+## Project Status
+This project is currently in a maintenance state. It is working, but not actively developed, although contributions are open. 
+Currently, the focus is on [lanis-mobile](https://github.com/lanis-mobile/lanis).
+Although the code in this repository may work, it is not of high quality. For a better interface, please check out [LanisAPI](https://github.com/lanis-mobile/liblanis-for-python).
+Additionally, some features in the app may have been reverse-engineered. Take a look at this file for a comprehensive collection of SPH parsing: [https://github.com/lanis-mobile/lanis/blob/main/app/lib/client/client.dart](https://github.com/lanis-mobile/liblanis/blob/main/lib/easy_client.dart). For encryption, refer to this file: [https://github.com/lanis-mobile/lanis/blob/main/app/lib/client/cryptor.dart](https://github.com/lanis-mobile/liblanis/blob/main/lib/src/session/cryptor.dart).
 
 ## Auch interessant:
-Android APP: https://github.com/alessioC42/lanis-mobile
+Android APP: https://github.com/lanis-mobile/lanis
 
 ## Features
 
@@ -57,9 +58,9 @@ client.authenticate().then(() => {
 
 - <a href="https://support.schulportal.hessen.de/knowledgebase.php?article=1087">mögliche Loginprobleme mit einigen Schulen</a>
 
-- <a href="https://info.schulportal.hessen.de/das-sph/sph-ueberblick/sph-lernsys/"> alle "Apps" innerhalb des Schulportal Hessen. (Konfiguation variiert nach Schule)</a>
+- <a href="https://info.schulportal.hessen.de/das-sph/sph-ueberblick/sph-lernsys/"> alle "Apps" innerhalb des Schulportal Hessen. (Konfiguration variiert nach Schule)</a>
 
-- <a href="https://info.schulportal.hessen.de/">algemeine Info (Server Status / Updates / ganz bissen Doumentation)</a>
+- <a href="https://info.schulportal.hessen.de/">allgemeine Informationen (Server Status / Updates / ganz bissen Documentation)</a>
 
 - <a href="https://info.schulportal.hessen.de/datenschutzerklaerung">Lanis Datenschutzerklärung</a>
   - Session nur 100 min gültig
