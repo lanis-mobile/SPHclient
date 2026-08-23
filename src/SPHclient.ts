@@ -3,7 +3,7 @@ class SPHclient {
   cookies: any = {};
   stayLoggedInBodyOption = "";
 
-  constructor(private username: string, private password: string, private schoolID: number, private stayLoggedIn = false, private loggingLevel = 1) {
+  constructor(private username: string, private password: string, private schoolID: number, private stayLoggedIn = false, private loggingLevel = 1, private userAgent = "Lanis-Mobile/v4+SPHClient-ts") {
     if (stayLoggedIn) {this.stayLoggedInBodyOption = "stayconnected=1"}
   }
 
@@ -16,6 +16,7 @@ class SPHclient {
       const response = await fetch(`https://login.schulportal.hessen.de/?i=${this.schoolID}&${this.stayLoggedInBodyOption}`, {
         headers: {
           "content-type": "application/x-www-form-urlencoded",
+          "User-Agent": this.userAgent
         },
         redirect: "manual",
         body: encodeURI(
@@ -40,6 +41,7 @@ class SPHclient {
           method: "GET",
           headers: {
             cookie: this.getCookieHeader(),
+            "User-Agent": this.userAgent
           },
         });
 
@@ -51,6 +53,7 @@ class SPHclient {
             redirect: "manual",
             headers: {
               cookie: this.getCookieHeader(),
+              "User-Agent": this.userAgent
             },
           });
 
@@ -85,6 +88,7 @@ class SPHclient {
         method: "GET",
         headers: {
           cookie: this.getCookieHeader(),
+          "User-Agent": this.userAgent
         },
       });
 
@@ -140,6 +144,7 @@ class SPHclient {
         headers: {
           Host: "start.schulportal.hessen.de",
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "User-Agent": this.userAgent,
           Cookie:
             "sph-login-upstream=4;schulportal_lastschool=" +
             this.schoolID +
@@ -164,6 +169,7 @@ class SPHclient {
         headers: {
           Host: "start.schulportal.hessen.de",
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "User-Agent": this.userAgent,
           Cookie:
             "sph-login-upstream=4;schulportal_lastschool=" +
             this.schoolID +
@@ -214,6 +220,7 @@ class SPHclient {
         headers: {
           Host: "start.schulportal.hessen.de",
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "User-Agent": this.userAgent,
           Cookie:
             "sph-login-upstream=4;schulportal_lastschool=" +
             this.schoolID +
