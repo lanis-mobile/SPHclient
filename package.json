@@ -10,7 +10,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alessioC42/SPHclient.git"
+    "url": "git+https://github.com/lanis-mobile/SPHclient.git"
   },
   "author": "Alessio Caputo",
   "contributors": [
@@ -22,9 +22,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/alessioC42/SPHclient/issues"
+    "url": "https://github.com/lanis-mobile/SPHclient/issues"
   },
-  "homepage": "https://github.com/alessioC42/SPHclient",
+  "homepage": "https://github.com/lanis-mobile/SPHclient",
   "devDependencies": {
     "typescript": "^7.0.2"
   },
