@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/alessioC42/SPHclient",
   "devDependencies": {
-    "typescript": "^5.3.3"
+    "typescript": "^7.0.2"
   },
   "scripts": {
     "build": "tsc"
